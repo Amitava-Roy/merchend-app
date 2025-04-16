@@ -1,4 +1,6 @@
-default export const  SimpleTable = ({ headers, data, renderRow }) => (
+export default function SimpleTable({ headers, data = [], renderRow }) {
+  console.log(data);
+  return (
     <div className="overflow-x-auto bg-white rounded-lg shadow">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
@@ -15,8 +17,9 @@ default export const  SimpleTable = ({ headers, data, renderRow }) => (
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {data.map(renderRow)}
+          {data?.map(renderRow)}
         </tbody>
       </table>
     </div>
   );
+}

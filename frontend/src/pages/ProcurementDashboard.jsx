@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { PlusCircle, Edit, Trash2 } from 'lucide-react';
-import { SimpleTable, Button } from '../components/ui';
-import { fetchVendors } from '../api';
+import React, { useState, useEffect } from "react";
+import { PlusCircle, Edit, Trash2 } from "lucide-react";
+import { SimpleTable, Button } from "../components/ui";
+import { fetchVendors } from "../api";
 
 const ProcurementDashboard = () => {
-  const [fetchedVendors, setFetchedVendors] = useState([]);
+  const [vendorsDataApi, setVendorsDataApi] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const vendorsData = await fetchVendors();
-        setFetchedVendors(vendorsData);
+        setVendorsDataApi(vendorsData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     }
 
     fetchData();
   }, []);
+  console.log(vendorsDataApi);
 
   return (
     <div className="p-6 space-y-6">
@@ -40,7 +41,7 @@ const ProcurementDashboard = () => {
           "Location",
           "Actions",
         ]}
-        data={fetchedVendors}
+        data={vendorsDataApi}
         renderRow={(vendor) => (
           <tr key={vendor.id}>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

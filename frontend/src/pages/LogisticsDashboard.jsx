@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
-import { SimpleTable, Button, KpiCard } from '../components/ui';
-import { fetchShipments } from '../api';
+import React, { useState, useEffect } from "react";
+import { Search } from "lucide-react";
+import { SimpleTable, Button, KpiCard } from "../components/ui";
+import { fetchShipments } from "../api";
+
 const LogisticsDashboard = () => {
   const [fetchedShipments, setFetchedShipments] = useState([]);
 
-
   useEffect(() => {
-    async function fetchData() {
+    async function loadShipments() {
       try {
-        const shipmentsResponse = await fetch('/api/shipments');
-        const shipmentsData = await shipmentsResponse.json();
+        const shipmentsData = await fetchShipments();
         setFetchedShipments(shipmentsData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching shipments:", error);
       }
     }
 
-    fetchData();
+    loadShipments();
   }, []);
 
   return (

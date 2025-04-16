@@ -1,53 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
+const orderRoutes = require('./routes/orderRoutes');
+const productRoutes = require('./routes/productRoutes');
+const shipmentRoutes = require('./routes/shipmentRoutes');
+const vendorRoutes = require('./routes/vendorRoutes');
+const sampleRoutes = require('./routes/sampleRoutes');
 
 const app = express();
 const PORT = 3000;
-
-// Middleware
-app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/marchendiseApp', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("db connection made.");
+  });
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
+// Middleware
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
-// Example Schema and Model
-const UserSchema = new mongoose.Schema({
-  name: String,
-  role: String,
-});
-
-const User = mongoose.model('User', UserSchema);
-
-// API Endpoints
-app.get('/api/users', async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch users' });
-  }
-});
-
-app.post('/api/users', async (req, res) => {
-  try {
-    const newUser = new User(req.body);
-    await newUser.save();
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create user' });
-  }
-});
+// Use routes
+app.use('/api/orders', orderRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/shipments', shipmentRoutes);
+app.use('/api/vendors', vendorRoutes);
+app.use('/api/samples', sampleRoutes);
 
 // Start the server
 app.listen(PORT, () => {
